@@ -16,7 +16,8 @@ class User(BaseModel):
 users_db: List[User] = [
     User(id=1, name="Alice", age=30, email="alice@example.com"),
     User(id=2, name="Bob", age=25, email="bob@example.com"),
-    User(id=3, name="Charlie", age=35, email="charlie@example.com")
+    User(id=3, name="Charlie", age=35, email="charlie@example.com"),
+    User(id=4, name="Charlie2", age=35, email="charlie2@example.com"),
 ]
 
 # 전체 사용자 조회
