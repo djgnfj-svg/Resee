@@ -212,3 +212,4 @@ next-env.d.ts
 
 # Custome
 .secrets.json
+test.sh
