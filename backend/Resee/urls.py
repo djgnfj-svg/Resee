@@ -17,9 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    # 필요한 경우 각 앱의 URLs을 추가합니다.
+    path('api/', include('apis.urls')),  # 모든 API를 'api/' 아래에 연결
 ]
