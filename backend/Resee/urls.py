@@ -16,8 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('apis.urls')),  # 모든 API를 'api/' 아래에 연결
+    # JWT Token Endpoints
+    path('auth/', include('dj_rest_auth.urls')),  # 로그인/로그아웃 API
+    path('auth/registration/', include('dj_rest_auth.registration.urls')),  # 회원가입 API
 ]

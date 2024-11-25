@@ -15,6 +15,8 @@ import json
 from django.core.exceptions import ImproperlyConfigured
 
 from pathlib import Path
+from datetime import timedelta
+
 # 비밀 값 로드 함수
 def get_secret(setting, secrets_file='.secrets.json'):
     """비밀 설정 값을 가져오거나 오류를 발생시킵니다."""
@@ -62,8 +64,17 @@ INSTALLED_APPS = [
 
     # Django REST Framework
     'rest_framework',
+    'rest_framework.authtoken',  # REST Framework에서 토큰 기반 인증 지원
+    'dj_rest_auth',
+    'allauth',  # Django AllAuth 설치
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+    'django.contrib.sites',  # Django AllAuth 필수
 ]
 
+
+SITE_ID = 1  # Django AllAuth에서 사용하는 필수 설정
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'Resee.urls'
@@ -148,3 +160,23 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# RESTAPI
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',  # 세션 기반 인증
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',  # 인증된 사용자만 접근 가능
+    # ],
+}
+
+# 회원가입 설정
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "username"  # username, email, 또는 username_email
+ACCOUNT_EMAIL_VERIFICATION = "none"  # 이메일 인증 설정: mandatory, optional, none
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # 개발 중 이메일 확인용
+
+
