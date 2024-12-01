@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'custom_user',
     'book',
     'pots',
+    # CORS
+    'corsheaders',
 
     # Django REST Framework
     'rest_framework',
@@ -77,6 +79,7 @@ INSTALLED_APPS = [
 SITE_ID = 1  # Django AllAuth에서 사용하는 필수 설정
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # 가장 위에 추가
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -180,3 +183,11 @@ ACCOUNT_EMAIL_VERIFICATION = "none"  # 이메일 인증 설정: mandatory, optio
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # 개발 중 이메일 확인용
 
 
+# CORS
+# 모든 도메인 허용
+CORS_ALLOW_ALL_ORIGINS = True
+
+# 특정 도메인만 허용 (더 안전한 옵션)
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
