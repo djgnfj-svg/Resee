@@ -4,7 +4,7 @@ from custom_user.models import CustomUser, Subscription
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'verificate']
+        fields = ['id', 'username', 'email']
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:

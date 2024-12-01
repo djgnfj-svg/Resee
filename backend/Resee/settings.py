@@ -65,18 +65,19 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Django REST Framework
+    'django.contrib.sites',  # django-allauth를 위해 필요
+
+    # 서드파티 앱들
     'rest_framework',
-    'rest_framework.authtoken',  # REST Framework에서 토큰 기반 인증 지원
-    'dj_rest_auth',
-    'allauth',  # Django AllAuth 설치
+    'rest_framework.authtoken',  # dj-rest-auth를 위해 필요
+    'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'dj_rest_auth',
     'dj_rest_auth.registration',
-    'django.contrib.sites',  # Django AllAuth 필수
+    'rest_framework_simplejwt',  # JWT 인증 지원
 ]
 
-
-SITE_ID = 1  # Django AllAuth에서 사용하는 필수 설정
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # 가장 위에 추가
@@ -91,7 +92,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Resee.urls'
-AUTH_USER_MODEL = 'custom_user.CustomUser'
 
 TEMPLATES = [
     {
@@ -166,21 +166,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # RESTAPI
+SITE_ID = 1
+AUTH_USER_MODEL = 'custom_user.CustomUser'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  # 세션 기반 인증
+        'rest_framework.authentication.SessionAuthentication',  # 세션 인증
+        'rest_framework.authentication.BasicAuthentication',
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',  # 인증된 사용자만 접근 가능
-    # ],
 }
 
-# 회원가입 설정
-ACCOUNT_USERNAME_REQUIRED = True
+REST_USE_JWT = False  # JWT 대신 세션 기반 사용
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # 이메일로 로그인
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = "username"  # username, email, 또는 username_email
-ACCOUNT_EMAIL_VERIFICATION = "none"  # 이메일 인증 설정: mandatory, optional, none
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # 개발 중 이메일 확인용
+ACCOUNT_USERNAME_REQUIRED = False  # 사용자명 비활성화
 
 
 # CORS
