@@ -11,7 +11,7 @@ const BookPage = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const response = await api.get('book/books/'); // Django API의 엔드포인트
+                const response = await api.get('books/'); // Django API의 엔드포인트
                 setBooks(response.data);
             } catch (error) {
                 console.error('Error fetching books:', error);

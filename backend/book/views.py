@@ -7,5 +7,6 @@ class BookViewSet(ModelViewSet):
     serializer_class = BookSerializer
 
 class BookCategoryViewSet(ModelViewSet):
+    #TODO : 나중에는 가장많은 갯수를 가진 카테고리를 기본으로 설정
     queryset = BookCategory.objects.all()
     serializer_class = BookCategorySerializer

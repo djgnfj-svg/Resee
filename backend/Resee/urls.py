@@ -27,7 +27,7 @@ from rest_framework.decorators import api_view
 def api_root(request, format=None):
     return Response({
         'custom_user': request.build_absolute_uri('custom_user/'),
-        'book': request.build_absolute_uri('book/'),
+        'books': request.build_absolute_uri('books/'),  # 'book'에서 'books'로 변경
         'pots': request.build_absolute_uri('pots/')
     })
 
@@ -36,9 +36,9 @@ urlpatterns = [
     path('auth/', include('dj_rest_auth.urls')),  # 로그인/로그아웃 API
     path('auth/registration/', include('dj_rest_auth.registration.urls')),  # 회원가입 API
     # JWT Token Endpoints
-    path('api/', api_root),  # 모든 API를 'api/' 아래에 연결
-    path('api/book/', include('book.urls')),
+    path('api/', api_root),
+    path('api/books/', include('book.urls')),
     path('api/pots/', include('pots.urls')),
-    path('api/custom_user/', include('custom_user.urls')),
+    path('api/custom_users/', include('custom_user.urls')),
 ]
 
