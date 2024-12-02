@@ -69,18 +69,12 @@ INSTALLED_APPS = [
 
     # 서드파티 앱들
     'rest_framework',
-    'rest_framework.authtoken',  # dj-rest-auth를 위해 필요
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
-    'rest_framework_simplejwt',  # JWT 인증 지원
+    'rest_framework_simplejwt',
+
 ]
 
-
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # 가장 위에 추가
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,7 +82,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'Resee.urls'
@@ -165,23 +158,24 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# RESTAPI
-SITE_ID = 1
+# Custom user 모델 설정
 AUTH_USER_MODEL = 'custom_user.CustomUser'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  # 세션 인증
-        'rest_framework.authentication.BasicAuthentication',
-    ],
+SITE_ID = 1  # django-allauth 설정
+
+# REST Framework 및 SimpleJWT 설정
+# REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
+    # ),
+# }
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
-
-REST_USE_JWT = False  # JWT 대신 세션 기반 사용
-ACCOUNT_AUTHENTICATION_METHOD = 'email'  # 이메일로 로그인
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False  # 사용자명 비활성화
-
 
 # CORS
 # 모든 도메인 허용

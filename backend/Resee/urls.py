@@ -21,6 +21,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
+    TokenVerifyView,
 )
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -41,7 +42,8 @@ urlpatterns = [
     path('api/books/', include('book.urls')),
     path('api/pots/', include('pots.urls')),
     path('api/custom_users/', include('custom_user.urls')),
-    path('api/auth/', include('dj_rest_auth.urls')),  # 로그인, 로그아웃 등
-    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),  # 회원가입
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
 
