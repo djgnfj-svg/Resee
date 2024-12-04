@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import api from '../utils/api'; // Axios 인스턴스
+import axios from 'axios';
 import Link from 'next/link';
 
 const BookPage = () => {
@@ -14,14 +15,26 @@ const BookPage = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const response = await api.get('books/'); // Django API의 엔드포인트
-                setBooks(response.data);
+                // 로컬 스토리지에서 access_token 가져오기
+                const token = localStorage.getItem('access_token');
+
+                console.log(token);
+
+                // Axios 요청 설정
+                const response = await axios.get('http://127.0.0.1:8000/api/books/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // 토큰 추가
+                    },
+                });
+
+                setBooks(response.data); // API 응답 데이터 설정
             } catch (error) {
                 console.error('Error fetching books:', error);
             } finally {
-                setLoading(false);
+                setLoading(false); // 로딩 상태 업데이트
             }
         };
+
         fetchBooks();
     }, []);
 

@@ -25,8 +25,8 @@ export default function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json()
-                localStorage.setItem('accessToken', data.access) // Access Token 저장
-                localStorage.setItem('refreshToken', data.refresh) // Refresh Token 저장
+                localStorage.setItem('access_token', data.access) // Access Token 저장
+                localStorage.setItem('refresh_token', data.refresh) // Refresh Token 저장
                 console.log('로그인 성공:', data)
                 setError('') // 에러 초기화
                 router.push('/books') // 성공 시 페이지 이동
