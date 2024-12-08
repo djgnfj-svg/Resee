@@ -16,13 +16,10 @@ class BookViewSet(ModelViewSet):
     authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
-        # 현재 요청한 사용자
         user = self.request.user
-        # 사용자가 인증된 경우 해당 사용자가 생성한 책만 반환
         if user.is_authenticated:
             return Book.objects.filter(user=user)
-        # 인증되지 않은 경우 빈 QuerySet 반환
-        return Book.objects.none()
+        return None
     
     def create(self, request, *args, **kwargs):
         try:

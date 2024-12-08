@@ -43,7 +43,10 @@ SECRET_KEY =  get_secret('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -60,7 +63,7 @@ INSTALLED_APPS = [
     # 생성한 앱들
     'custom_user',
     'book',
-    'pots',
+    'post',
     # CORS
     'corsheaders',
 
@@ -183,12 +186,13 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'AUTH_HEADER_TYPES': ('Bearer',),  # 'Bearer'가 있어야 합니다.
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',  # 기본값을 유지하세요.
+    'ALGORITHM': 'HS256',
 }
 # CORS
 # 모든 도메인 허용
 CORS_ALLOW_ALL_ORIGINS = True
 
 # 특정 도메인만 허용 (더 안전한 옵션)
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+# ]
