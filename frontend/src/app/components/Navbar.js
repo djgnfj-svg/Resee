@@ -9,7 +9,7 @@ const Navbar = () => {
       <Link href="/custom_user" style={{ marginRight: '15px', color: '#fff' }}>
         Users
       </Link>
-      <Link href="/book" style={{ marginRight: '15px', color: '#fff' }}>
+      <Link href="/books" style={{ marginRight: '15px', color: '#fff' }}>
         Books
       </Link>
       <Link href="/pots" style={{ color: '#fff' }}>

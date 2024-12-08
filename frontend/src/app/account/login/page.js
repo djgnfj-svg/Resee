@@ -25,14 +25,18 @@ export default function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json()
-                localStorage.setItem('access_token', data.access) // Access Token 저장
-                localStorage.setItem('refresh_token', data.refresh) // Refresh Token 저장
+                localStorage.setItem('access_token', data.access)
+                localStorage.setItem('refresh_token', data.refresh)
                 console.log('로그인 성공:', data)
-                setError('') // 에러 초기화
-                router.push('/books') // 성공 시 페이지 이동
+                setError('')
+                router.push('/books')
             } else {
                 const errorData = await response.json()
-                setError(errorData.detail || 'Login failed') // 서버 에러 메시지 설정
+                if (response.status === 401) {
+                    setError('로그인에 실패했습니다.')
+                } else {
+                    setError(errorData.detail || '로그인에 실패했습니다.')
+                }
             }
         } catch (error) {
             console.error('로그인 에러:', error)

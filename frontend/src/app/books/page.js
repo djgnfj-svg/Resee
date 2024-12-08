@@ -1,11 +1,13 @@
 "use client"; // 클라이언트 컴포넌트 선언
 
 import { useEffect, useState } from 'react';
-import api from '../utils/api'; // Axios 인스턴스
+import privateApi from '../utils/api'; // Axios 인스턴스
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const BookPage = () => {
+    const router = useRouter(); // useRouter 훅 사용
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedBook, setSelectedBook] = useState(null);
@@ -15,44 +17,77 @@ const BookPage = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                // 로컬 스토리지에서 access_token 가져오기
                 const token = localStorage.getItem('access_token');
+
+                if (!token) {
+                    router.push('/account/login');
+                    return;
+                }
 
                 console.log(token);
 
-                // Axios 요청 설정
                 const response = await axios.get('http://127.0.0.1:8000/api/books/', {
                     headers: {
-                        Authorization: `Bearer ${token}`, // 토큰 추가
+                        Authorization: `Bearer ${token}`,
                     },
                 });
 
-                setBooks(response.data); // API 응답 데이터 설정
+                setBooks(response.data);
             } catch (error) {
-                console.error('Error fetching books:', error);
+                if (error.response?.status === 401) {
+                    router.push('/account/login');
+                }
             } finally {
-                setLoading(false); // 로딩 상태 업데이트
+                setLoading(false);
             }
         };
 
         fetchBooks();
-    }, []);
+    }, [router]); // router를 의존성 배열에 추가
 
     const handleSave = async () => {
         if (isCreating) {
             try {
-                await api.post('books/', { title: selectedBook.title, simple_explanation: selectedBook.simple_explanation });
+                const token = localStorage.getItem('access_token');
+
+                if (!token) {
+                    router.push('/account/login');
+                    return;
+                }
+                await axios.post('http://127.0.0.1:8000/api/books/', { title: selectedBook.title, simple_explanation: selectedBook.simple_explanation },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
                 alert('Book created successfully');
                 setShowModal(false);
                 setIsCreating(false);
-                const response = await api.get('books/');
+                const response = await axios.get('http://127.0.0.1:8000/api/books/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setBooks(response.data);
             } catch (error) {
                 console.error('Error creating book:', error);
             }
         } else if (selectedBook) {
             try {
-                await api.put(`books/${selectedBook.id}/`, { title: selectedBook.title, simple_explanation: selectedBook.simple_explanation });
+                const token = localStorage.getItem('access_token');
+
+                if (!token) {
+                    router.push('/account/login');
+                    return;
+                }
+                await axios.put(`http://127.0.0.1:8000/api/books/${selectedBook.id}/`, { title: selectedBook.title, simple_explanation: selectedBook.simple_explanation },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
                 alert('Book updated successfully');
                 setIsCreating(false);
                 setShowModal(false);
@@ -67,8 +102,20 @@ const BookPage = () => {
         if (selectedBook) {
             const confirmDelete = confirm('삭제하시겠습니까?');
             if (confirmDelete) {
+                const token = localStorage.getItem('access_token');
+
+                if (!token) {
+                    router.push('/account/login');
+                    return;
+                }
                 try {
-                    await api.delete(`books/${selectedBook.id}/`);
+                    await axios.delete(`http://127.0.0.1:8000/api/books/${selectedBook.id}/`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
                     alert('Book deleted successfully');
                     setBooks(books.filter((book) => book.id !== selectedBook.id));
                     setShowModal(false);
@@ -153,7 +200,7 @@ const BookPage = () => {
                                 onClick={handleSave}
                                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                             >
-                                업데이트
+                                {isCreating ? '생성' : '업데이트'}
                             </button>
                             <button
                                 onClick={handleDelete}
