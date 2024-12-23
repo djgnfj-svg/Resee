@@ -6,7 +6,7 @@ from rest_framework import status
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'book', 'title', 'script']
+        fields = '__all__'
         read_only_fields = ['book']  # book 필드는 읽기 전용으로 설정
 
     def list(self, request):
